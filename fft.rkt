@@ -73,20 +73,16 @@
               [(= (round (norm-complex (last a))) 0) (strip-of-zeros (take a (sub1 (length a))))]
               [#t a]))
 
+
 ; given two large numbers X and Y then this function computes X.Y
 ; x = (X_0, X_1, ... , X_n)
 ; y = (Y_0, Y_1, ... , Y_m)
 ; the answer is also encoded in such fashion
 ; Precondition: |x| = |y| = 2^n for some n, also for every i, 0 <= x_i < 10 a number
 (define (multiply x y)
-        (reverse (strip-of-zeros (normalize-fft
+        (strip-of-zeros (normalize-fft
             (fft^-1 (map (lambda (x y) (*complex x y))
-                (fft (append x (make-list (length x) 0)))
-                (fft (append y (make-list (length y) 0)))))))))
+                (fft (append (reverse x) (make-list (length x) 0)))
+                (fft (append (reverse y) (make-list (length y) 0))))))))
 
-
-(define ans (map (lambda (z) (inexact->exact (round (re z))))
-                 (multiply '(4 3 1 1) '(6 8 7 4))))
-
-
-(poly-eval ans 10)
+(provide (all-defined-out))
